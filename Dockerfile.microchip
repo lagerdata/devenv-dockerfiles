@@ -17,7 +17,6 @@
 # docker build -t lager .
 # docker run --name lager_bash --rm -it lager bash
 
-#NOTE: THIS IS WILL GENERATE A VERY LARGE IMAGE (~17GB). TO REDUCE SIZE COMMENT TOOLS THAT MIGHT NOT BE NECESSARY
 
 FROM ubuntu:20.04
 
