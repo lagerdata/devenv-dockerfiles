@@ -83,6 +83,3 @@ RUN mkdir -p /opt/esp
 RUN cd /opt/esp && git clone --recursive https://github.com/espressif/esp-idf.git
 RUN cd /opt/esp/esp-idf/ && ./install.sh
 SHELL ["/bin/bash", "-c", "source /opt/esp/esp-idf/export.sh"]
-
-RUN useradd appuser
-USER appuser
