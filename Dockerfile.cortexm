@@ -75,4 +75,4 @@ ENV PATH=$PATH:/opt/nanopb
 RUN pip3 install 'lager-cli==0.1.35'
 
 #install ceedling build system
-gem install ceedling
+RUN gem install ceedling

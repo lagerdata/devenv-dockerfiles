@@ -85,4 +85,4 @@ RUN cd /opt/esp/esp-idf/ && ./install.sh
 SHELL ["/bin/bash", "-c", "source /opt/esp/esp-idf/export.sh"]
 
 #install ceedling build system
-gem install ceedling
+RUN gem install ceedling
