@@ -1,43 +1,6 @@
 FROM ubuntu:20.04
 ARG DEBIAN_FRONTEND=noninteractive
 
-# # For help with editing and block commenting add plugin to sublime
-
-# #macos
-# #Press cmd(⌘)-shift-p and type "add repo".
-# #Then paste in the GitHub address for this package:
-
-# #https://github.com/jaytaylor/Dockerfile.sublime-syntax
-
-# #Press cmd(⌘)-shift-p and type "install".
-# #Enter "Dockerfile.sublime-syntax" and press enter.
-# #Restart Sublime
-# #windows
-# #Replace cmd(⌘) with Ctrl
-
-# #usage:
-# # e.g.
-# # docker build -t lager .
-# # docker run --name lager_bash --rm -it lager bash
-
-
-# FROM ubuntu:20.04
-
-# MAINTAINER Akbar Dhanaliwala <akbar@lagerdata.com>
-
-# WORKDIR /app
-
-# ARG DEBIAN_FRONTEND=noninteractive
-
-# # Download tools(including gcc), prerequisites
-# RUN apt-get update && \
-# apt-get install -y python3-pip gcc-arm-none-eabi cmake ninja-build \
-# 	&& apt-get autoremove -y && apt-get clean -y
-
-# RUN pip3 install 'lager-cli==0.1.43'
-
-
-
 # Set up a tools dev directory
 WORKDIR /home/dev
 
@@ -56,7 +19,7 @@ RUN apt-get update \
     && mv /home/dev/gcc-arm-none-eabi-9-2020-q2-update/share/gcc-arm-none-eabi /usr/share \
     && mv /home/dev/gcc-arm-none-eabi-9-2020-q2-update/arm-none-eabi /usr
 
-RUN pip3 install 'lager-cli==0.1.45'
+RUN pip3 install 'lager-cli==0.1.47'
 
 # Set up the compiler path
 ENV PATH $PATH:/home/dev/gcc-arm-none-eabi-9-2020-q2-update/bin
