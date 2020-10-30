@@ -32,7 +32,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
 apt-get install -y wget curl git unzip bzip2 build-essential gcc-multilib pkg-config python python-setuptools python3 \
 python3-pip python3-setuptools python-cryptography python-pyparsing python-pyelftools nano bash \
-ruby x clang cmake ninja-build libncurses-dev flex bison gperf ccache libffi-dev libssl-dev dfu-util \
+ruby gcc-arm-none-eabi clang cmake ninja-build libncurses-dev flex bison gperf ccache libffi-dev libssl-dev dfu-util \
 libnss3-tools libnss3 libpython2.7\
 		&& apt-get clean all
 
