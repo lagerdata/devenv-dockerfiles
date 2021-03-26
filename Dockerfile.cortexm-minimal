@@ -19,7 +19,7 @@ RUN apt-get update \
     && mv /home/dev/gcc-arm-none-eabi-9-2020-q2-update/share/gcc-arm-none-eabi /usr/share \
     && mv /home/dev/gcc-arm-none-eabi-9-2020-q2-update/arm-none-eabi /usr
 
-RUN pip3 install 'lager-cli==0.1.67'
+RUN pip3 install 'lager-cli==0.1.81'
 
 # Set up the compiler path
 ENV PATH $PATH:/home/dev/gcc-arm-none-eabi-9-2020-q2-update/bin
