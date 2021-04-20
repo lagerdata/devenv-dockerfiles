@@ -79,5 +79,7 @@ ENV PATH=$PATH:/opt/nanopb/generator-bin
 #install ceedling build system
 RUN gem install ceedling
 
+
 #install Lager
-RUN pip3 install 'lager-cli==0.1.84'
+RUN pip3 install 'lager-cli==0.1.87'
+
