@@ -78,4 +78,4 @@ ENV PATH=$PATH:/opt/nanopb
 RUN gem install ceedling
 
 RUN apt-get install -y gdb-multiarch
-RUN pip3 install 'lager-cli==0.1.90'
+RUN pip3 install 'lager-cli==0.1.92'

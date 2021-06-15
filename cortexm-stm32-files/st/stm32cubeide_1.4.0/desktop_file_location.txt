@@ -1,0 +1,1 @@
+/usr/share/applications/st-stm32cubeide-1.4.0.desktop

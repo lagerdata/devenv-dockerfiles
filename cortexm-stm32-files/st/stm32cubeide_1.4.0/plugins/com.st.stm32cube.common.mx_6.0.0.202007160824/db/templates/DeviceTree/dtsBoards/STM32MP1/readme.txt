@@ -1,0 +1,1 @@
+Manifest=openstlinux-20-05-12_internal

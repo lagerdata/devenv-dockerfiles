@@ -1,0 +1,7 @@
+&adc {
+	status = "disabled";
+};
+
+&usbh_ohci{
+	phys = <&usbphyc_port0>;
+};

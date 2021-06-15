@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.st.stm32cube.ide.feature.mcu.p2"
+      label="%pluginName"
+      version="1.4.0.202007151546"
+      provider-name="%providerName"
+      plugin="com.st.stm32cube.ide.mcu.ide">
+
+   <description>
+      %description
+   </description>
+
+   <copyright url="%copyrightURL">
+      %copyright
+   </copyright>
+
+   <plugin
+         id="com.st.stm32cube.ide.mcu.p2"
+         download-size="26"
+         install-size="55"
+         version="1.4.0.202007151546"
+         unpack="false"/>
+
+<license url="%licenseURL">
+      %license
+   </license></feature>

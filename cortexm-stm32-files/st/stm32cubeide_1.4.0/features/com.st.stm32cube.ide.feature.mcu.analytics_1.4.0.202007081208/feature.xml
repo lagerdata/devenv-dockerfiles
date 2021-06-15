@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.st.stm32cube.ide.feature.mcu.analytics"
+      label="%pluginName"
+      version="1.4.0.202007081208"
+      provider-name="%providerName">
+
+   <description>
+      %description
+   </description>
+
+   <copyright url="%copyrightURL">
+      %copyright
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <plugin
+         id="com.st.stm32cube.ide.mcu.analytics"
+         download-size="1256"
+         install-size="1482"
+         version="1.4.0.202007081208"/>
+
+</feature>
