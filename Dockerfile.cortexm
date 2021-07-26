@@ -36,23 +36,10 @@ ruby gcc-arm-none-eabi clang cmake ninja-build libncurses-dev flex bison gperf c
 libnss3-tools libnss3 libpython2.7\
 		&& apt-get clean all
 
-# Install python-pip
-# NOTE: Python2 was deprecated on Jan.1, 2020. Ubuntu 20.04 does not ship with python2
-#RUN curl https://bootstrap.pypa.io/get-pip.py --output /tmp/get-pip.py
-#RUN python2 /tmp/get-pip.py && rm /tmp/get-pip.py
 
 ENV GNU_INSTALL_ROOT /usr/bin/
 ENV GNU_PREFIX arm-none-eabi
 
-#Install Nordic Tools
-RUN pip3 install nrfutil
-RUN curl -fSL -A "Mozilla/4.0" -o /tmp/nRFCommandLineTools10121Linuxamd64.tar.gz "https://www.nordicsemi.com/-/media/Software-and-other-downloads/Desktop-software/nRF-command-line-tools/sw/Versions-10-x-x/10-12-1/nRFCommandLineTools10121Linuxamd64.tar.gz"
-RUN cd /tmp && tar -xvzf /tmp/nRFCommandLineTools10121Linuxamd64.tar.gz
-RUN cd /tmp && tar -xvzf /tmp/nRF-Command-Line-Tools_10_12_1.tar
-RUN mv /tmp/mergehex /opt/ && mv /tmp/nrfjprog /opt/
-RUN cd /tmp && rm JLink_Linux_V688a_x86_64.deb JLink_Linux_V688a_x86_64.tgz nRF-Command-Line-Tools_10_12_1.tar \
-nRF-Command-Line-Tools_10_12_1_Linux-amd64.deb nRFCommandLineTools10121Linuxamd64.tar.gz README.txt
-ENV PATH=$PATH:/opt/mergehex:/opt/nrfjprog
 
 #Install FTDI D2XX driver
 RUN curl -fSL -A "Mozilla/4.0" -o /tmp/libftd2xx-x86_64-1.4.8.gz "https://www.ftdichip.com/Drivers/D2XX/Linux/libftd2xx-x86_64-1.4.8.gz"
@@ -81,5 +68,5 @@ RUN gem install ceedling
 
 
 #install Lager
-RUN pip3 install 'lager-cli==0.1.92'
+RUN pip3 install 'lager-cli==0.1.97'
 

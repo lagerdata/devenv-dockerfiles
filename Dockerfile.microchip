@@ -12,10 +12,6 @@
 #windows
 #Replace cmd(⌘) with Ctrl
 
-#usage:
-# e.g.
-# docker build -t lager .
-# docker run --name lager_bash --rm -it lager bash
 
 
 FROM ubuntu:20.04
@@ -26,84 +22,30 @@ WORKDIR /app
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-
-
-# Download tools(including gcc), prerequisites
 RUN apt-get update && \
-apt-get install -y wget curl git unzip bzip2 build-essential gcc-multilib pkg-config python python-setuptools python3 \
-python3-pip python3-setuptools python-cryptography python-pyparsing python-pyelftools nano bash \
-ruby gcc-arm-none-eabi clang cmake ninja-build libncurses-dev flex bison gperf ccache libffi-dev libssl-dev dfu-util \
-libasound2-dev libgconf-2-4 libnotify-dev libnss3-tools libnss3 libpython2.7 default-jdk\
-		&& apt-get clean all
-
-# Install python-pip
-# NOTE: Python2 was deprecated on Jan.1, 2020. Ubuntu 20.04 does not ship with python2
-RUN curl https://bootstrap.pypa.io/get-pip.py --output /tmp/get-pip.py
-RUN python2 /tmp/get-pip.py && rm /tmp/get-pip.py
-
-ENV GNU_INSTALL_ROOT /usr/bin/
-ENV GNU_PREFIX arm-none-eabi
-
-# # Other Dependencies - i386
-
-RUN dpkg --add-architecture i386 \
+    apt-get install -y wget bzip2 python3-pip gdb-multiarch && \
+    dpkg --add-architecture i386 \
     && apt-get update -yq \
     && apt-get upgrade -yq \
-    && apt-get install -yq --no-install-recommends cpio \
-    libc6:i386 libx11-6:i386 libxext6:i386 libstdc++6:i386 libexpat1:i386 \
-    libxext6 libxrender1 libxtst6 libgtk2.0-0 libxslt1.1 libncurses5-dev libusb-0.1-4:i386 \
-	unzip \
-	xz-utils
+    && apt-get install -yq --no-install-recommends libc6:i386 libx11-6:i386 libxext6:i386 libstdc++6:i386 libexpat1:i386 \
+    && wget https://www.microchip.com/content/dam/mchp/documents/DEV/ProductDocuments/SoftwareTools/MPLABX-v5.50-linux-installer.tar \
+    && wget https://www.microchip.com/mplabxc32linux \
+    && tar -xvf MPLABX-v5.50-linux-installer.tar \
+    && chmod u+x mplabxc32linux \
+    && chmod +x MPLABX-v5.50-linux-installer.sh \
+    && export USER=root \
+    && printf '\n\n\n\n\n\n\n\n\n\n\n\n\n\ny\n\n2\nn\nY\nn\nn\nn\nY\nn\nY\n' | ./MPLABX-v5.50-linux-installer.sh \
+    && printf '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ny\n1\n\ny\n\nn\nn\nn\n\n' | ./mplabxc32linux \
+    && rm MPLABX-v5.50-linux-installer.tar \
+    && rm MPLABX-v5.50-linux-installer.sh \
+    && rm mplabxc32linux \
+    && rm -rf /opt/microchip/xc32/docs \
+    && rm -rf /opt/microchip/xc32/examples \
+    && find /opt/microchip/mplabx/v5.50/packs/Microchip -mindepth 1 ! -path '/opt/microchip/mplabx/v5.50/packs/Microchip/PIC32MM*' -delete \
+    && rm -rf /opt/microchip/mplabx/v5.50/docs \
+    && pip3 install -U 'lager-cli==0.1.97' \
+    && apt-get remove -y wget bzip2 gcc make build-essential\
+    && apt-get autoremove -y && apt-get clean -y
 
-# Download and Install XC8 Compiler, Current Version
-RUN curl -fSL -A "Mozilla/4.0" -o /tmp/xc8.run "http://www.microchip.com/mplabxc8linux" \
-    && chmod a+x /tmp/xc8.run \
-    && /tmp/xc8.run --mode unattended --unattendedmodeui none \
-        --netservername localhost --LicenseType FreeMode --prefix /opt/microchip/xc8 \
-    && rm /tmp/xc8.run
+ENV PATH $PATH:/opt/microchip/mplabx/v5.50/mplab_platform/bin
 
-ENV PATH $PATH:/opt/microchip/xc8/bin
-
-# Download and Install XC16 Compiler, Current Version
-RUN curl -fSL -A "Mozilla/4.0" -o /tmp/xc16.run "http://www.microchip.com/mplabxc16linux" \
-    && chmod a+x /tmp/xc16.run \
-    && /tmp/xc16.run --mode unattended --unattendedmodeui none \
-        --netservername localhost --LicenseType FreeMode --prefix /opt/microchip/xc16 \
-    && rm /tmp/xc16.run
-
-ENV PATH $PATH:/opt/microchip/xc16/bin
-
-# Download and Install XC32 Compiler, Current Version
-RUN curl -fSL -A "Mozilla/4.0" -o /tmp/xc32.run "http://www.microchip.com/mplabxc32linux" \
-    && chmod a+x /tmp/xc32.run \
-    && /tmp/xc32.run --mode unattended --unattendedmodeui none \
-        --netservername localhost --LicenseType FreeMode --prefix /opt/microchip/xc32 \
-    && rm /tmp/xc32.run
-
-ENV PATH $PATH:/opt/microchip/xc32/bin
-
-#Install FTDI D2XX driver
-RUN curl -fSL -A "Mozilla/4.0" -o /tmp/libftd2xx-x86_64-1.4.8.gz "https://www.ftdichip.com/Drivers/D2XX/Linux/libftd2xx-x86_64-1.4.8.gz"
-RUN cd /tmp && tar -xvzf /tmp/libftd2xx-x86_64-1.4.8.gz
-RUN cp  /tmp/release/build/lib*  /usr/local/lib/ 2>/dev/null || :
-RUN cd /usr/local/lib && ln -s libftd2xx.so.1.4.8 libftd2xx.so && chmod 0755 libftd2xx.so.1.4.8 && rm -rf /tmp/release /tmp/libftd2xx-x86_64-1.4.8.gz
-
-ENV PATH=$PATH:/usr/local/lib
-
-# Install nanopb and protoc
-ENV PROTOC_ZIP=protoc-3.7.1-linux-x86_64.zip
-RUN curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v3.7.1/$PROTOC_ZIP
-RUN unzip -o $PROTOC_ZIP -d /usr/local bin/protoc
-RUN unzip -o $PROTOC_ZIP -d /usr/local 'include/*'
-RUN rm -f $PROTOC_ZIP
-RUN curl -fSL -A "Mozilla/4.0" -o /tmp/nanopb-0.4.1-linux-x86.tar.gz "https://jpa.kapsi.fi/nanopb/download/nanopb-0.4.1-linux-x86.tar.gz"
-RUN cd /tmp && tar -xvzf /tmp/nanopb-0.4.1-linux-x86.tar.gz
-RUN mkdir -p /opt/nanopb
-RUN cp -r /tmp/nanopb-0.4.1-linux-x86 /opt/nanopb/ && rm -rf /tmp/nanopb-0.4.1-linux-x86.tar.gz /tmp/nanopb-0.4.1-linux-x86
-
-ENV PATH=$PATH:/opt/nanopb
-
-#install ceedling build system
-RUN gem install ceedling
-
-RUN pip3 install 'lager-cli==0.1.92'
