@@ -52,5 +52,5 @@ RUN gem install ceedling
 
 
 #install Lager
-RUN pip3 install 'lager-cli==0.1.97'
+RUN pip3 install 'lager-cli==0.1.98'
 

@@ -11,8 +11,8 @@
 #Restart Sublime
 #windows
 #Replace cmd(⌘) with Ctrl
-
-
+    #dpkg --add-architecture i386 \
+    #&& apt-get install -yq --no-install-recommends libc6:i386 libx11-6:i386 libxext6:i386 libstdc++6:i386 libexpat1:i386 \
 
 FROM ubuntu:20.04
 
@@ -23,11 +23,9 @@ WORKDIR /app
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
-    apt-get install -y wget bzip2 python3-pip gdb-multiarch && \
-    dpkg --add-architecture i386 \
+    apt-get install -y wget bzip2 python3-pip texinfo expat \
     && apt-get update -yq \
     && apt-get upgrade -yq \
-    && apt-get install -yq --no-install-recommends libc6:i386 libx11-6:i386 libxext6:i386 libstdc++6:i386 libexpat1:i386 \
     && wget https://www.microchip.com/content/dam/mchp/documents/DEV/ProductDocuments/SoftwareTools/MPLABX-v5.50-linux-installer.tar \
     && wget https://www.microchip.com/mplabxc32linux \
     && tar -xvf MPLABX-v5.50-linux-installer.tar \
@@ -43,8 +41,17 @@ RUN apt-get update && \
     && rm -rf /opt/microchip/xc32/examples \
     && find /opt/microchip/mplabx/v5.50/packs/Microchip -mindepth 1 ! -path '/opt/microchip/mplabx/v5.50/packs/Microchip/PIC32MM*' -delete \
     && rm -rf /opt/microchip/mplabx/v5.50/docs \
-    && pip3 install -U 'lager-cli==0.1.97' \
-    && apt-get remove -y wget bzip2 gcc make build-essential\
+    && pip3 install -U 'lager-cli==0.1.98' \
+    && wget http://ftp.gnu.org/gnu/gdb/gdb-10.2.tar.gz \
+    && tar -xvzf gdb-10.2.tar.gz \
+    && mkdir _build \
+    && cd _build \
+    && /app/gdb-10.2/configure --target=mips --with-expat=yes && make && make install \
+    && cd /app \
+    && rm -rf _build \
+    && rm -rf gdb-10.2 \
+    && rm gdb-10.2.tar.gz \
+    && apt-get remove -y wget bzip2 gcc gdb make build-essential texinfo \
     && apt-get autoremove -y && apt-get clean -y
 
 ENV PATH $PATH:/opt/microchip/mplabx/v5.50/mplab_platform/bin
